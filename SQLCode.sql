@@ -1,72 +1,72 @@
--- Verificación de las DB
+-- DB Verification
 SHOW DATABASES;
 
--- Creación de la DB
-CREATE DATABASE citas_odonto;
+-- DB creation
+CREATE DATABASE dental_appointments;
 
--- Utilizacion de la DB actual
-USE citas_odonto;
+-- Use of the current DB
+USE dental_appointments;
 
--- Verificacion de las tablas en la DB
+-- Verification of tables in the DB
 SHOW TABLES;
 
--- Creación de la tabla roles
+-- Creation of the roles table
 CREATE TABLE roles(
 	id_rol INT AUTO_INCREMENT PRIMARY KEY,
-	rol ENUM ("Administrador", "Dentista", "Asistente", "Recepcionista", "Paciente"));
+	rol ENUM ("Administrator", "Dentist", "Assistant", "Receptionist", "Patient"));
 
--- Insertar datos de prueba en roles
+-- Insert test data into roles
 INSERT INTO roles (rol)
 	VALUES 
-	("Administrador"),
-	("Dentista"),
-	("Asistente"),
-	("Recepcionista"),
-	("Paciente");
+	("Administrator"),
+	("Dentist"),
+	("Assistant"),
+	("Receptionist"),
+	("Patient");
 
--- Verificación de los datos de prueba en roles
+-- Verifying Test Data in Roles
 SELECT *
 FROM roles;
 
--- Creación de la tabla permisos
-CREATE TABLE permisos (
-	id_permiso INT AUTO_INCREMENT PRIMARY KEY,
-	nombre_permiso VARCHAR(45),
-	descripción_permiso VARCHAR(255)
+-- Creating the Permissions Table
+CREATE TABLE permissions (
+	id_permission INT AUTO_INCREMENT PRIMARY KEY,
+	permission_name VARCHAR(45),
+	permit_description VARCHAR(255)
 );
 
--- Insertar datos de prueba en permisos
-INSERT INTO permisos (nombre_permiso, descripción_permiso)
+-- Insert test data into permissions
+INSERT INTO permissions (permission_name, permit_description)
 	VALUES 
-	("Administrador", "Gestionar usuarios (crear, editar, eliminar cuentas de usuario), 
-	configurar roles y permisos, acceder a todas las funcionalidades del sistema."),
-	("Dentista", "Ver y gestionar citas asignadas, acceder al historial médico de los 
-	pacientes, registrar tratamientos y recetas para los pacientes asignados, acceder a 
-	herramientas específicas para realizar procedimientos dentales."),
-	("Asistente", "Gestionar agenda de citas (crear, modificar, cancelar citas), actualizar 
-	información básica de pacientes, enviar recordatorios de citas a los pacientes, acceder 
-	a ciertas funcionalidades administrativas bajo supervisión."),
-	("Recepcionista", "Atender llamadas y confirmar citas, registrar y gestionar la 
-	información de pacientes en la base de datos, ayudar en la gestión de la agenda y las 
-	citas."),
-	("Paciente", "Ver su historial médico y de tratamientos, programar, ver y cancelar sus 
-	propias citas, acceder y modificar información personal y básica del perfil.");
+	("Administrator", "Manage users (create, edit, delete user accounts), 
+	configure roles and permissions, access all the functionalities of the system."),
+	("Dentist", "View and manage assigned appointments, access the medical history of the 
+	Patients, register treatments and prescriptions for assigned Patients, access 
+	specific tools to perform dental procedures."),
+	("Assistant", "Manage appointment schedule (create, modify, cancel appointments), update 
+	basic Patients information, send appointment reminders to Patients, access 
+	to certain administrative functions under supervision."),
+	("Receptionist", "Take calls and confirm appointments, register and manage the 
+	information on Patients in the database, assist in the management of the agenda and 
+	Dating."),
+	("Patient", "View your medical and treatment history, schedule, view, and cancel your 
+	own appointments, access and modify personal and basic profile information.");
 	
--- Verificación de los datos de prueba en permisos
+-- Verifying Test Data in Permissions
 SELECT *
-FROM permisos;
+FROM permissions;
 
--- Creación de la tabla roles_permisos
-CREATE TABLE roles_permisos (
-	id_rol_permiso INT AUTO_INCREMENT PRIMARY KEY,
+-- Creating the roles_permissions Table
+CREATE TABLE roles_permissions (
+	id_rol_permission INT AUTO_INCREMENT PRIMARY KEY,
 	id_rol INT,
-	id_permiso INT,
+	id_permission INT,
 	FOREIGN KEY(id_rol) REFERENCES roles(id_rol),
-	FOREIGN KEY(id_permiso) REFERENCES permisos(id_permiso)
+	FOREIGN KEY(id_permission) REFERENCES permissions(id_permission)
 );
 
--- Insertar datos de prueba en roles_permisos
-INSERT INTO roles_permisos (id_rol, id_permiso)
+-- Insert test data into roles_permissions
+INSERT INTO roles_permissions (id_rol, id_permission)
 	VALUES
 	(1, 1),
 	(2, 2),
@@ -74,139 +74,139 @@ INSERT INTO roles_permisos (id_rol, id_permiso)
 	(4, 4),
 	(5, 5);
 
--- Verificación de los datos de prueba en roles_permisos
+-- Verification of test data in roles_permissions
 SELECT *
-FROM roles_permisos;
+FROM roles_permissions;
 
--- Creación de la tabla usuarios
-CREATE TABLE usuarios (
-	id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-	nombre_usuario VARCHAR(30) UNIQUE NOT NULL,
+-- Creating the Users Table
+CREATE TABLE users (
+	id_user INT AUTO_INCREMENT PRIMARY KEY,
+	user_name VARCHAR(30) UNIQUE NOT NULL,
 	id_rol INT,
-	nombre VARCHAR(45) NOT NULL,
-	apellidos VARCHAR(45) NOT NULL,
+	first_name VARCHAR(45) NOT NULL,
+	last_name VARCHAR(45) NOT NULL,
 	email VARCHAR(45) UNIQUE NOT NULL,
-	contraseña VARCHAR(45) NOT NULL,
+	password VARCHAR(45) NOT NULL,
 	avatar VARCHAR(255),
-	dirección VARCHAR(100) NOT NULL,
-	código_postal VARCHAR(15) NOT NULL,
-	teléfono_fijo VARCHAR(25) DEFAULT "Sin numero",
-	teléfono_celular VARCHAR(25) DEFAULT "Sin numero",
-	fecha_nacimiento DATE,
-	edad INT NOT NULL,
+	address VARCHAR(100) NOT NULL,
+	zip_code VARCHAR(15) NOT NULL,
+	home_phone VARCHAR(25) DEFAULT "No number",
+	cellular_phone VARCHAR(25) DEFAULT "No number",
+	birthdate  DATE,
+	age INT NOT NULL,
 	FOREIGN KEY (id_rol) REFERENCES roles(id_rol)
 );
 
--- Insertar datos de prueba en usuarios
-INSERT INTO usuarios (nombre_usuario, id_rol, nombre, apellidos, email, contraseña, avatar, 
-	dirección, código_postal, teléfono_fijo, teléfono_celular, fecha_nacimiento, edad)
+-- Insert test data into users
+INSERT INTO users (user_name, id_rol, first_name, last_name, email, password, avatar, 
+	address, zip_code, home_phone, cellular_phone, birthdate , age)
 	VALUES
 	("admin_prueba", 1, "Juan", "Mir", "admin22@correo.com", "admin232411", "https://cdn-icons-png.flaticon.com/512/4140/4140077.png", 
-	"Dirección1212", "55410112", "55-14-14-25-41", "55-74-84-69-85", "1990-05-21", 33),
-	("dentista_prueba", 2, "Luis", "H", "dentista@correo.com", "dentista4512", "https://cdn-icons-png.flaticon.com/512/4140/4140071.png",
-	"Dirección2323", "12659845", "55-41-85-96-85", "55-74-85-96-25", "1985-09-08", 38),
-	("asistente_prueba", 3, "Federico", "V", "asistente@correo.com", "asistente9865", "https://cdn-icons-png.flaticon.com/512/4140/4140061.png",
-	"Dirección7485", "12457845", "55-41-58-96-85", "55-41-85-69-58", "1978-12-17", 44),
-	("recepcionista_prueba", 4, "John", "C", "recepcionista@correo.com", "recepcionista8574", "https://cdn-icons-png.flaticon.com/512/4140/4140068.png",
-	"Dirección7414", "12568945", "55-95-25-74-47", "55-36-14-58-56", "1987-03-29", 35),
-	("paciente_prueba", 5, "Regina", "G", "paciente@gmail.com", "paciente7474", "https://cdn-icons-png.flaticon.com/512/4140/4140052.png", 
+	"address1212", "55410112", "55-14-14-25-41", "55-74-84-69-85", "1990-05-21", 33),
+	("Dentist_prueba", 2, "Luis", "H", "Dentist@correo.com", "Dentist4512", "https://cdn-icons-png.flaticon.com/512/4140/4140071.png",
+	"address2323", "12659845", "55-41-85-96-85", "55-74-85-96-25", "1985-09-08", 38),
+	("Assistant_prueba", 3, "Federico", "V", "Assistant@correo.com", "Assistant9865", "https://cdn-icons-png.flaticon.com/512/4140/4140061.png",
+	"address7485", "12457845", "55-41-58-96-85", "55-41-85-69-58", "1978-12-17", 44),
+	("Receptionist_prueba", 4, "John", "C", "Receptionist@correo.com", "Receptionist8574", "https://cdn-icons-png.flaticon.com/512/4140/4140068.png",
+	"address7414", "12568945", "55-95-25-74-47", "55-36-14-58-56", "1987-03-29", 35),
+	("Patient_prueba", 5, "Regina", "G", "Patient@gmail.com", "Patient7474", "https://cdn-icons-png.flaticon.com/512/4140/4140052.png", 
 	"Direcció1425", "32659845", "55-84-96-14-12", "55-14-96-25-15", "1995-11-02", 27);
 
--- Verificación de los datos de prueba en usuarios
+-- Verifying test data in users
 SELECT *
-FROM usuarios;
+FROM users;
 
--- Creación de la tabla dentistas
-CREATE TABLE dentistas (
-	id_dentista INT AUTO_INCREMENT PRIMARY KEY,
-	id_usuario INT,
-	nombre VARCHAR(100) NOT NULL,
-	cédula_profesional VARCHAR(45) NOT NULL,
-	especialidad VARCHAR(45) NOT NULL,
-	experiencia_años INT,
-	certificaciones TEXT,
-	FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+-- Creating the Dentists Table
+CREATE TABLE Dentists (
+	id_dentist INT AUTO_INCREMENT PRIMARY KEY,
+	id_user INT,
+	name VARCHAR(100) NOT NULL,
+	professional_id VARCHAR(45) NOT NULL,
+	specialty VARCHAR(45) NOT NULL,
+	years_experience INT,
+	certifications TEXT,
+	FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
 
--- Creación de más usuarios dentistas para la tabla dentistas
-INSERT INTO usuarios (nombre_usuario, id_rol, nombre, apellidos, email, contraseña, avatar, 
-	dirección, código_postal, teléfono_fijo, teléfono_celular, fecha_nacimiento, edad)
+-- Creating More Users Dentists for the Dentists Table
+INSERT INTO users (user_name, id_rol, first_name, last_name, email, password, avatar, 
+	address, zip_code, home_phone, cellular_phone, birthdate , age)
 	VALUES
-	("dentista_general", 2, "Eduardo", "H", "general@correo.com", "dentista526385", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
-	"Dirección4812", "021452", "55-65-84-20-41", "55-66-77-77-44", "1986-09-08", 37),
-	("dentista_ortodoncia", 2, "Marcos", "J", "ortodoncia@correo.com", "dentista142512", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
-	"Dirección1423", "418596", "55-14-58-76-65", "55-34-25-56-05", "1985-09-08", 38),
-	("dentista_periodoncia", 2, "Julian", "A", "periodoncia@correo.com", "dentista560285", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
-	"Dirección8956", "012584", "55-00-11-22-33", "55-44-55-66-77", "1984-09-08", 39),
-	("dentista_endodoncia", 2, "David", "D", "endodoncia@correo.com", "dentista968574", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
-	"Dirección2342", "987845", "55-41-86-67-56", "55-43-52-56-50", "1983-09-08", 40),
-	("dentista_cirugía", 2, "Luis", "S", "cirugia@correo.com", "dentista258574", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
-	"Dirección2415", "2489612", "55-44-47-36-52", "55-02-02-11-22", "1982-09-08", 41),
-	("dentista_odontopediatría", 2, "Victor", "M", "pediatria@correo.com", "dentista986589", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
-	"Dirección2574", "847589", "55-69-85-74-05", "55-14-25-36-74", "1981-09-08", 42),
-	("dentista_estética", 2, "Valeria", "R", "estetica@correo.com", "dentista859674", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
-	"Dirección3685", "748514", "55-96-58-47-45", "55-12-45-74-96", "1980-09-08", 43),
-	("dentista_implantología", 2, "Laura", "J", "implantologia@correo.com", "dentista976431", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
-	"Dirección0022", "849562", "55-84-51-30-59", "55-48-15-02-03", "1979-09-08", 44);
+	("Dentist_general", 2, "Eduardo", "H", "general@correo.com", "Dentist526385", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
+	"address4812", "021452", "55-65-84-20-41", "55-66-77-77-44", "1986-09-08", 37),
+	("Dentist_ortodoncia", 2, "Marcos", "J", "ortodoncia@correo.com", "Dentist142512", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
+	"address1423", "418596", "55-14-58-76-65", "55-34-25-56-05", "1985-09-08", 38),
+	("Dentist_periodoncia", 2, "Julian", "A", "periodoncia@correo.com", "Dentist560285", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
+	"address8956", "012584", "55-00-11-22-33", "55-44-55-66-77", "1984-09-08", 39),
+	("Dentist_endodoncia", 2, "David", "D", "endodoncia@correo.com", "Dentist968574", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
+	"address2342", "987845", "55-41-86-67-56", "55-43-52-56-50", "1983-09-08", 40),
+	("Dentist_cirugía", 2, "Luis", "S", "cirugia@correo.com", "Dentist258574", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
+	"address2415", "2489612", "55-44-47-36-52", "55-02-02-11-22", "1982-09-08", 41),
+	("Dentist_odontopediatría", 2, "Victor", "M", "pediatria@correo.com", "Dentist986589", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
+	"address2574", "847589", "55-69-85-74-05", "55-14-25-36-74", "1981-09-08", 42),
+	("Dentist_estética", 2, "Valeria", "R", "estetica@correo.com", "Dentist859674", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
+	"address3685", "748514", "55-96-58-47-45", "55-12-45-74-96", "1980-09-08", 43),
+	("Dentist_implantología", 2, "Laura", "J", "implantologia@correo.com", "Dentist976431", "https://static.vecteezy.com/system/resources/previews/023/051/537/non_2x/line-icon-for-dental-vector.jpg",
+	"address0022", "849562", "55-84-51-30-59", "55-48-15-02-03", "1979-09-08", 44);
 
--- Verificación de los datos de prueba en usuarios
+-- Verifying test data in users
 SELECT *
-FROM usuarios;
+FROM users;
 
--- Insertar datos de prueba en dentistas
-INSERT INTO dentistas (id_usuario, nombre, cédula_profesional, especialidad, 
-	experiencia_años, certificaciones)
+-- Insert Test Data in Dentists
+INSERT INTO Dentists (id_user, name, professional_id, specialty, 
+	years_experience, certifications)
 	VALUES
 	(6, "Eduardo Hernández Jiménez", 778899, "Odontología general", 14, "Miembro de la Asociación Dental Regional"),
 	(7, "Marcos Javier Ortíz Soler", 123456, "Ortodoncia", 12, "Certificado en Invisalign"),
-	(8, "Julian Aguilar Fuentes ", 987654, "Periodoncia", 8, "Miembro de la Sociedad de Periodoncia"),
-	(9, "David Domínguez Maya", 142536, "Endodoncia", 10, "Especialista en Tratamientos de Conducto"),
+	(8, "Julian Aguilar Fuentes ", 987654, "Periodoncia", 8, "Miembro de la Sociage de Periodoncia"),
+	(9, "David Domínguez Maya", 142536, "Endodoncia", 10, "Especialista en treatments de Conducto"),
 	(10, "Luis Suárez Treviño", 475869, "Cirugía oral y maxilofacial", 15, "Diplomado en Cirugía Reconstructiva Facial"),
 	(11, "Victor Martínez Rubio", 849562, "Odontopediatría", 7, "Certificado en Trato con Niños"),
 	(12, "Valeria Rosales Soler", 849562, "Odontología estética", 9, "Especialista en Carillas Dentales"),
 	(13, "Laura Robles Ayala", 794613, "Implantología dental", 11, "Certificación en Implantes Orales");
 
--- Verificación de los datos de prueba en dentistas
+-- Verification of test data in Dentists
 SELECT *
-FROM dentistas;
+FROM Dentists;
 
--- Creación de la tabla citas
-CREATE TABLE citas (
-	id_cita INT AUTO_INCREMENT PRIMARY KEY,
-	fecha_hora DATETIME NOT NULL,
-	método_pago ENUM ("Tarjeta de crédito", "Efectivo", "Transferencia bancaria", "Paypal"),
-	estado_pago ENUM ("Pendiente", "Pagado", "Rechazado"),
-	notas VARCHAR(255) DEFAULT "Sin notas para la cita",
-	duración VARCHAR(45) DEFAULT "Sin tiempo estimado"
+-- Creating the appointments table
+CREATE TABLE appointments (
+	id_appointment INT AUTO_INCREMENT PRIMARY KEY,
+	date DATETIME NOT NULL,
+	payment_method ENUM ("Credit card", "Cash", "Bank transfer", "Paypal"),
+	payment_status ENUM ("Pending payment", "Paid", "Refused"),
+	notes VARCHAR(255) DEFAULT "No notes for appointment",
+	duration VARCHAR(45) DEFAULT "No estimated time"
 );
 
--- Insertar datos de prueba en citas
-INSERT INTO citas (fecha_hora, método_pago, estado_pago, notas, duración)
+-- Insertar datos de prueba en appointments
+INSERT INTO appointments (date, payment_method, payment_status, notes, duration)
 	VALUES 
-	("2024-07-18 08:23:45", "Tarjeta de crédito", "Pendiente", "Sin notas para la cita", "120 minutos"),
-	("2025-02-03 17:42:19", "Efectivo", "Pendiente", "Sin notas para la cita", "90 minutos"),
-	("2026-11-29 12:05:33", "Efectivo", "Pagado", "Realizar evaluación del paciente", "Sin tiempo estimado"),
-	("2027-09-14 06:59:22", "Transferencia bancaria", "Pagado", "Paciente con condición de salud", "60 minutos"),
-	("2028-04-20 23:37:51", "Paypal", "Rechazado", "Realizar protocolos de sanitización adicionales", "30 minutos");
+	("2024-07-18 08:23:45", "Credit card", "Pending payment", "No notes for appointment", "120 minutos"),
+	("2025-02-03 17:42:19", "Cash", "Pending payment", "No notes for appointment", "90 minutos"),
+	("2026-11-29 12:05:33", "Cash", "Paid", "Realizar evaluación del Patient", "No estimated time"),
+	("2027-09-14 06:59:22", "Bank transfer", "Paid", "Patient con condición de salud", "60 minutos"),
+	("2028-04-20 23:37:51", "Paypal", "Refused", "Realizar protocolos de sanitización adicionales", "30 minutos");
 
--- Verificación de los datos de prueba en citas
+-- Verifying Test Data in Appointments
 SELECT *
-FROM citas;
+FROM appointments;
 
--- Creación de la tabla tratamientos
-CREATE TABLE tratamientos (
-	id_tratamiento INT AUTO_INCREMENT PRIMARY KEY,
-	id_dentista INT,
-	nombre_tratamiento VARCHAR(45),
-	descripción_tratamiento VARCHAR(255),
-	precio VARCHAR(50),
-	duración VARCHAR(45) DEFAULT "Sin tiempo estimado",
-	FOREIGN KEY (id_dentista) REFERENCES dentistas(id_dentista)
+-- Creation of the treatment table
+CREATE TABLE treatments (
+	id_treatment INT AUTO_INCREMENT PRIMARY KEY,
+	id_dentist INT,
+	name_treatment VARCHAR(45),
+	description_treatment VARCHAR(255),
+	price VARCHAR(50),
+	duration VARCHAR(45) DEFAULT "No estimated time",
+	FOREIGN KEY (id_dentist) REFERENCES Dentists(id_dentist)
 );
 
--- Insertar datos de prueba en tratamientos
-INSERT INTO tratamientos (id_dentista, nombre_tratamiento, descripción_tratamiento, precio,
-	duración)
+-- Insert test data into treatments
+INSERT INTO treatments (id_dentist, name_treatment, description_treatment, price,
+	duration)
 	VALUES
 	(1, "Limpieza dental", "Procedimiento para remover placa y sarro de los dientes", "200.00 por sesión",
 	"Sesión 30 minutos"),
@@ -214,7 +214,7 @@ INSERT INTO tratamientos (id_dentista, nombre_tratamiento, descripción_tratamie
 	"30 minutos por diente"),
 	(1, "Exámenes y diagnósticos regulares", "Revisiones dentales para evaluar la salud bucal", "$150.00 por sesión",
 	"Sesión 30 minutos"), 
-	(1, "Tratamientos para dientes sensibles", "Aplicación de selladores o geles para reducir la sensibilidad dental", "300.00 por diente",
+	(1, "treatments para dientes sensibles", "Aplicación de selladores o geles para reducir la sensibilidad dental", "300.00 por diente",
 	"30 minutos por diente"),
 	(2, "Brackets metálicos", "Colocación de dispositivos de metal para alinear los dientes", "6000.00 por tratamiento",
 	"Tratamiento de 18 a 36 meses"),
@@ -232,7 +232,7 @@ INSERT INTO tratamientos (id_dentista, nombre_tratamiento, descripción_tratamie
 	"30 minutos por área"),
 	(3, "Tratamiento de bolsas periodontales", "Eliminación de bacterias en bolsas alrededor de los dientes", "500.00 por área",
 	"30 minutos por área"),
-	(3, "Mantenimiento periodontal", "Cuidados continuos para controlar la enfermedad periodontal", "300.00 por sesión",
+	(3, "Mantenimiento periodontal", "Cuidados continuos para controlar la enfermage periodontal", "300.00 por sesión",
 	"Sesión 30 minutos"),
 	(4, "Tratamiento de conducto", "Eliminación de nervios infectados y sellado del conducto radicular", "$800.00 por diente",
 	"45 minutos por diente"),
@@ -250,7 +250,7 @@ INSERT INTO tratamientos (id_dentista, nombre_tratamiento, descripción_tratamie
 	"Variabilidad significativa"),
 	(6, "Selladores dentales", "Recubrimientos protectores para prevenir la caries en niños", "100.00 por diente",
 	"15 minutos por diente"),
-	(6, "Tratamientos de caries", "Restauraciones para dientes dañados por caries", "200.00 por diente",
+	(6, "treatments de caries", "Restauraciones para dientes dañados por caries", "200.00 por diente",
 	"30 minutos por diente"),
 	(6, "Mantenedores de espacio", "Dispositivos para mantener el espacio de los dientes perdidos en niños", "200.00 por aparato",
 	"Sesión 60 minutos"),
@@ -273,21 +273,21 @@ INSERT INTO tratamientos (id_dentista, nombre_tratamiento, descripción_tratamie
 	(8, "Cirugía de implante", "Preparación del sitio para colocar implantes dentales", "1000.00 por diente",
 	"30 minutos por diente");
 	
--- Verificación de los datos de prueba en tratamientos
+-- Verification of test data in treatments
 SELECT *
-FROM tratamientos;
+FROM treatments;
 
--- Creación de la tabla citas_tratamientos
-CREATE TABLE citas_tratamientos (
-	id_cita_tratamiento INT AUTO_INCREMENT PRIMARY KEY,
-	id_cita INT,
-	id_tratamiento INT,
-	FOREIGN KEY (id_cita) REFERENCES citas(id_cita),
-	FOREIGN KEY (id_tratamiento) REFERENCES tratamientos(id_tratamiento)
+-- Creating the appointments_treatments Table
+CREATE TABLE appointments_treatments (
+	id_appointment_treatment INT AUTO_INCREMENT PRIMARY KEY,
+	id_appointment INT,
+	id_treatment INT,
+	FOREIGN KEY (id_appointment) REFERENCES appointments(id_appointment),
+	FOREIGN KEY (id_treatment) REFERENCES treatments(id_treatment)
 );
 
--- Insertar datos de prueba en citas_tratamientos
-INSERT INTO citas_tratamientos (id_cita, id_tratamiento)
+-- Insert test data into appointments_treatments
+INSERT INTO appointments_treatments (id_appointment, id_treatment)
 	VALUES
 	(1, 28),
 	(1, 28),
@@ -298,26 +298,26 @@ INSERT INTO citas_tratamientos (id_cita, id_tratamiento)
 	(4, 4),
 	(5, 1);
 
--- Verificación de los datos de prueba en citas_tratamientos
+-- Verification of test data in appointments_treatments
 SELECT *
-FROM citas_tratamientos;
+FROM appointments_treatments;
 
--- Consulta de una cita filtrando las columnas que se desean revisar
-SELECT c.id_cita, c.fecha_hora, c.duración, ct.id_cita_tratamiento, t.nombre_tratamiento 
-FROM citas AS c
-INNER JOIN citas_tratamientos AS ct ON c.id_cita = ct.id_cita
-INNER JOIN tratamientos AS t ON ct.id_tratamiento = t.id_tratamiento
-WHERE c.id_cita = 1;
+-- Querying an appointment by filtering the columns to review
+SELECT c.id_appointment, c.date, c.duration, ct.id_appointment_treatment, t.name_treatment 
+FROM appointments AS c
+INNER JOIN appointments_treatments AS ct ON c.id_appointment = ct.id_appointment
+INNER JOIN treatments AS t ON ct.id_treatment = t.id_treatment
+WHERE c.id_appointment = 1;
 
--- Consulta de una cita en base a una fecha, filtrando las columnas que se desean revisar
-SELECT c.id_cita, c.fecha_hora, c.estado_pago, c.notas, ct.id_cita_tratamiento, t.descripción_tratamiento, t.precio 
-FROM citas AS c
-INNER JOIN citas_tratamientos AS ct ON c.id_cita = ct.id_cita
-INNER JOIN tratamientos AS t ON ct.id_tratamiento = t.id_tratamiento
-WHERE c.fecha_hora = "2028-04-20 23:37:51";
+-- Querying an appointment based on a date, filtering the columns you want to review
+SELECT c.id_appointment, c.date, c.payment_status, c.notes, ct.id_appointment_treatment, t.description_treatment, t.price 
+FROM appointments AS c
+INNER JOIN appointments_treatments AS ct ON c.id_appointment = ct.id_appointment
+INNER JOIN treatments AS t ON ct.id_treatment = t.id_treatment
+WHERE c.date = "2028-04-20 23:37:51";
 
--- Consulta de un dentista en base a los tratamientos que realiza
-SELECT d.nombre, d.especialidad, d.certificaciones, t.nombre_tratamiento, t.descripción_tratamiento, t.precio 
-FROM dentistas AS d
-INNER JOIN tratamientos AS t ON d.id_dentista = t.id_dentista
-WHERE d.nombre = "Valeria Rosales Soler";
+-- Consultation of a Dentist based on the treatments performed
+SELECT d.name, d.specialty, d.certifications, t.name_treatment, t.description_treatment, t.price 
+FROM Dentists AS d
+INNER JOIN treatments AS t ON d.id_dentist = t.id_dentist
+WHERE d.name = "Valeria Rosales Soler";
